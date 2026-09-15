@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="720" viewBox="0 0 1400 720">
+<rect width="1400" height="720" fill="#f7f9fc"/><rect width="1400" height="118" fill="#101a36"/>
+<text x="70" y="62" fill="white" font-family="Arial,sans-serif" font-size="38" font-weight="700">AI-Powered Purchase Order Automation</text>
+<text x="70" y="96" fill="#b9c7ff" font-family="Arial,sans-serif" font-size="20">PDF / Email → n8n → AI Extraction → Validation → Approval → PostgreSQL</text>
+<g font-family="Arial,sans-serif" text-anchor="middle">
+<rect x="55" y="230" rx="18" width="180" height="130" fill="white" stroke="#d8deeb" stroke-width="3"/><text x="145" y="280" font-size="22" font-weight="700" fill="#18264a">PO / PDF</text><text x="145" y="315" font-size="16" fill="#5b657a">Document Intake</text>
+<rect x="290" y="230" rx="18" width="180" height="130" fill="#fff1f7" stroke="#ff4f8b" stroke-width="3"/><text x="380" y="280" font-size="25" font-weight="700" fill="#d82d69">n8n</text><text x="380" y="315" font-size="16" fill="#5b657a">Orchestration</text>
+<rect x="525" y="230" rx="18" width="180" height="130" fill="#f3efff" stroke="#8b5cf6" stroke-width="3"/><text x="615" y="280" font-size="22" font-weight="700" fill="#6638c7">AI Agent</text><text x="615" y="315" font-size="16" fill="#5b657a">Structured JSON</text>
+<rect x="760" y="230" rx="18" width="180" height="130" fill="#eefbf5" stroke="#32b875" stroke-width="3"/><text x="850" y="280" font-size="22" font-weight="700" fill="#168052">Validation</text><text x="850" y="315" font-size="16" fill="#5b657a">Business Rules</text>
+<rect x="995" y="230" rx="18" width="180" height="130" fill="#eef6ff" stroke="#3d82d6" stroke-width="3"/><text x="1085" y="280" font-size="22" font-weight="700" fill="#2363a9">Approval</text><text x="1085" y="315" font-size="16" fill="#5b657a">Human-in-the-loop</text>
+<rect x="1130" y="465" rx="18" width="215" height="120" fill="#eef6ff" stroke="#3d82d6" stroke-width="3"/><text x="1237" y="515" font-size="22" font-weight="700" fill="#2363a9">PostgreSQL</text><text x="1237" y="550" font-size="16" fill="#5b657a">Records + Audit Log</text>
+<rect x="830" y="465" rx="18" width="215" height="120" fill="white" stroke="#d8deeb" stroke-width="3"/><text x="937" y="515" font-size="22" font-weight="700" fill="#18264a">Notification</text><text x="937" y="550" font-size="16" fill="#5b657a">Email / Chat / API</text>
+</g>
+<g stroke="#56647e" stroke-width="4" fill="none"><path d="M235 295h55"/><path d="M470 295h55"/><path d="M705 295h55"/><path d="M940 295h55"/><path d="M1085 360v105"/><path d="M1130 525h-85"/></g>
+<text x="70" y="660" font-family="Arial,sans-serif" font-size="21" fill="#4d5970">Portfolio project • n8n • LLM • PostgreSQL • Webhooks • Human approval • Auditability</text>
+</svg>
