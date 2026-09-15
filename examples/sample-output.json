@@ -1,0 +1,32 @@
+{
+  "po_number": "PO-2026-001",
+  "order_date": "2026-09-15",
+  "supplier": "PT ABC Indonesia",
+  "currency": "IDR",
+  "subtotal": 113636364,
+  "tax": 11363636,
+  "shipping": 0,
+  "total_amount": 125000000,
+  "requires_approval": true,
+  "status": "PENDING_APPROVAL",
+  "risk_flags": ["AMOUNT_ABOVE_APPROVAL_THRESHOLD"],
+  "confidence": 0.96,
+  "items": [
+    {
+      "description": "Besi Hollow 20x40x2 mm",
+      "specification": "6 m",
+      "quantity": 100,
+      "uom": "pcs",
+      "unit_price": 500000,
+      "line_total": 50000000
+    },
+    {
+      "description": "Kloset Duduk",
+      "specification": "Standard",
+      "quantity": 10,
+      "uom": "pcs",
+      "unit_price": 2500000,
+      "line_total": 25000000
+    }
+  ]
+}
