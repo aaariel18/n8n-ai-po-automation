@@ -2,6 +2,8 @@
 
 An end-to-end automation concept for turning Purchase Order (PO) documents into structured, validated, auditable data using **n8n + an LLM + PostgreSQL + webhooks**.
 
+![Architecture](docs/architecture.svg)
+
 > Portfolio project — designed as a realistic enterprise automation pattern. No production credentials or company data are included.
 
 ## Problem
@@ -38,12 +40,11 @@ The workflow is intentionally modular so an organization can replace the LLM pro
 ## Features
 
 - Structured PO extraction into JSON
-- AI-assisted normalization of supplier and line-item data
-- Validation rules for quantities, prices, totals, and required fields
+- AI extraction prompt with strict output contract
+- Deterministic validation and risk flags
 - Approval routing based on configurable thresholds
-- PostgreSQL-ready data model
+- PostgreSQL-ready data model for POs, items, and audit events
 - Webhook-first integration pattern
-- Audit-log concept for traceability
 - Sample input/output for demonstrations
 - Importable n8n workflow template
 
@@ -65,6 +66,7 @@ n8n-ai-po-automation/
 │   └── sample-output.json
 └── docs/
     ├── architecture.md
+    ├── architecture.svg
     └── linkedin-post.md
 ```
 
@@ -72,14 +74,14 @@ n8n-ai-po-automation/
 
 1. Install or open an n8n instance.
 2. Import `workflows/po-ai-automation.json`.
-3. Configure your LLM/API credentials in the HTTP Request node according to your environment.
-4. Set the PostgreSQL connection details if you extend the template with a database node.
+3. Configure the LLM integration using the prompt in `prompts/po-extraction.md`.
+4. Configure PostgreSQL if you extend the workflow with database nodes.
 5. Send the example payload from `examples/sample-po.json` to the webhook.
-6. Review the normalized output and validation result.
+6. Review the validation and approval result.
 
 ### Environment variables
 
-The template avoids hard-coded secrets. A typical deployment can provide:
+The repository contains no production secrets. Keep provider keys outside Git, for example:
 
 ```bash
 OPENAI_API_KEY=replace_me
