@@ -1,0 +1,91 @@
+{
+  "name": "AI Purchase Order Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "purchase-order",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "po-webhook",
+      "name": "PO Intake Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [260, 300],
+      "webhookId": "purchase-order"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body ?? $json;\nconst po = typeof body === 'string' ? JSON.parse(body) : body;\nreturn [{ json: { ...po, received_at: new Date().toISOString(), source: 'webhook' } }];"
+      },
+      "id": "normalize-input",
+      "name": "Normalize Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const po = $json;\nconst required = ['po_number', 'supplier', 'currency', 'total_amount'];\nconst missing = required.filter(k => po[k] === undefined || po[k] === null || po[k] === '');\nconst total = Number(po.total_amount);\nconst threshold = 100000000;\nconst risk_flags = [...(po.risk_flags || [])];\nif (!Number.isFinite(total)) risk_flags.push('INVALID_TOTAL');\nif (missing.length) risk_flags.push('MISSING_REQUIRED_FIELD');\nif (Number.isFinite(total) && total > threshold) risk_flags.push('AMOUNT_ABOVE_APPROVAL_THRESHOLD');\nconst requires_approval = risk_flags.includes('AMOUNT_ABOVE_APPROVAL_THRESHOLD') || Number(po.confidence ?? 1) < 0.80;\nreturn [{ json: { ...po, missing_fields: missing, risk_flags: [...new Set(risk_flags)], requires_approval, status: missing.length ? 'REVIEW_REQUIRED' : (requires_approval ? 'PENDING_APPROVAL' : 'VALIDATED'), validation_passed: missing.length === 0 && Number.isFinite(total), approval_threshold: threshold } }];"
+      },
+      "id": "validate-po",
+      "name": "Validate & Route",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [740, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "conditions": [
+            { "leftValue": "={{ $json.requires_approval }}", "rightValue": true, "operator": { "type": "boolean", "operation": "true", "singleValue": true } }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "approval-check",
+      "name": "Approval Required?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [980, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: true, status: 'PENDING_APPROVAL', message: 'PO routed for human approval', purchase_order: $json } }}",
+        "options": { "responseCode": 202 }
+      },
+      "id": "approval-response",
+      "name": "Approval Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [1220, 180]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: $json.validation_passed, status: $json.status, purchase_order: $json } }}",
+        "options": { "responseCode": 200 }
+      },
+      "id": "validated-response",
+      "name": "Validated Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [1220, 420]
+    }
+  ],
+  "connections": {
+    "PO Intake Webhook": { "main": [[{ "node": "Normalize Input", "type": "main", "index": 0 }]] },
+    "Normalize Input": { "main": [[{ "node": "Validate & Route", "type": "main", "index": 0 }]] },
+    "Validate & Route": { "main": [[{ "node": "Approval Required?", "type": "main", "index": 0 }]] },
+    "Approval Required?": { "main": [[{ "node": "Approval Response", "type": "main", "index": 0 }], [{ "node": "Validated Response", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "versionId": "a1b2c3d4-po-automation",
+  "meta": { "templateCredsSetupCompleted": false },
+  "tags": []
+}
